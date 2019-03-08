@@ -6,9 +6,15 @@ import com.sun.net.httpserver.HttpExchange
 abstract class Request(val name: String) {
     fun request(exchange: HttpExchange): String {
         val answer = HashMap<String, String>()
-        exchange.requestURI.query.split('&').forEach {
-            val (name, value) = it.split('=')
-            answer[name] = value
+        val query = exchange.requestURI.query ?: ""
+        val split = query.split('&')
+        println(query)
+        for (string in split) {
+            if ('=' !in string)
+                continue
+            val (name, value) = string.split('=')
+            if (value != NULL)
+                answer[name] = value
         }
 
         return request(Query(answer))
@@ -16,37 +22,15 @@ abstract class Request(val name: String) {
 
     protected abstract fun request(query: Query): String
 
-    protected fun Map<String, Any>.toJSON(): String {
-        val builder = StringBuilder("{")
-        var index = 0
-        for ((name, value) in this) {
-            val str = when (value) {
-                value is Map<*, *> -> toJSON()
-                value is Pair<*, *> -> toJSON()
-                else -> value.toString()
-            }
-
-            builder
-                .append('\"')
-                .append(name)
-                .append("\":")
-                .append(str)
-            if (index != size - 1)
-                builder.append(',')
-            index++
-        }
-        builder.append('}')
-
-        return builder.toString()
-    }
-
-    protected fun Pair<String, Any>.toJSON() = mapOf(this).toJSON()
-
     protected class Query(val answer: Map<String, String>) {
+        val size get() = answer.size
+
         operator fun get(string: String) = answer[string]
+
+        fun isEmpty() = answer.isEmpty()
     }
 
-    protected companion object {
-
+    companion object {
+        private const val NULL = "<NULL>"
     }
 }

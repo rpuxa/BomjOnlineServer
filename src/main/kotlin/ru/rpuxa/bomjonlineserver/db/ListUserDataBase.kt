@@ -17,7 +17,7 @@ class ListUserDataBase : UserDataBase {
 
     override fun userByLogin(login: String) = list.find { it.login == login }
 
-    override fun userByMail(mail: String) = list.find { it.mail == mail }
+    override fun userByMail(mail: String) = list.find { it.email == mail }
 
     override fun userByToken(token: String) = list.find { it.token == token }
 }

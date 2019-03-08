@@ -1,6 +1,5 @@
 package ru.rpuxa.bomjonlineserver.requests
 
-import ru.rpuxa.bomjonlineserver.HTTPServer
 import ru.rpuxa.bomjonlineserver.Request
 import ru.rpuxa.bomjonlineserver.RequestCodes.BAD_ARGUMENTS
 import ru.rpuxa.bomjonlineserver.RequestCodes.UNKNOWN_TOKEN
@@ -12,8 +11,8 @@ const val TOKEN = "token"
 abstract class TokenRequest(name: String) : Request(name) {
 
     override fun request(query: Query): String {
-        val token = query.token ?: return BAD_ARGUMENTS
-        val user = dataBase.userByToken(token) ?: return UNKNOWN_TOKEN
+        val token = query.token ?: return BAD_ARGUMENTS.string
+        val user = dataBase.userByToken(token) ?: return UNKNOWN_TOKEN.string
         return request(user, query)
     }
 

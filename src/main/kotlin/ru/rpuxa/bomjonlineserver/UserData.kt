@@ -5,7 +5,7 @@ typealias HashString = String
 class UserData(
     val login: String,
     var password: HashString,
-    var mail: String,
+    var email: String,
     var id: Int,
     var token: String
 ) {
